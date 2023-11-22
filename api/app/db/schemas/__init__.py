@@ -1,5 +1,6 @@
-from app.db.schemas.user import *
-from app.db.schemas.token import *
+from db.schemas.user import *
+from db.schemas.token import *
+from db.schemas.book import *
 
 __all__ = [
     User,
@@ -7,6 +8,13 @@ __all__ = [
     UserCreate,
     UserUpdate,
     UserOut,
+
     TokenData,
-    Token  
+    Token,
+
+    Book,
+    BookBase,
+    BookCreate,
+    BookUpdate,
+    BookOut
 ]

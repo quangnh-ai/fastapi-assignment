@@ -1,6 +1,9 @@
-from app.db.models.user import *
-from app.db.models.base import Base
+from db.models.user import User
+from db.models.base import Base
+from db.models.book import Book
+
 __all__ = [
     User,
-    Base
+    Base,
+    Book
 ]
