@@ -7,19 +7,18 @@ from fastapi import (
     status
 )
 
-from app.db import session
-from app.db.schemas import (
+from db import session
+from db.schemas import (
     TokenData,
     UserCreate
 )
-from app.db.models import user as UserModel
-from app.db.crud.user import get_user_by_email, create_user
-from app.core import security, config
-
+from db.models import User
+from db.crud.user import get_user_by_email, create_user
+from core import security, config
 
 async def get_current_user(
-        db=Depends(session.get_db), 
-        token: str = Depends(security.oauth2_scheme)
+    db=Depends(session.get_db), 
+    token: str = Depends(security.oauth2_scheme)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -44,24 +43,21 @@ async def get_current_user(
         raise credentials_exception
     return user
 
-
 async def get_current_active_user(
-    current_user: UserModel.User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
-
 async def get_current_active_superuser(
-    current_user: UserModel.User = Depends(get_current_user),
-) -> UserModel.User:
+    current_user: User = Depends(get_current_user),
+) -> User:
     if not current_user.is_superuser:
         raise HTTPException(
             status_code=403, detail="The user doesn't have enough privileges"
         )
     return current_user
-
 
 def authenticate_user(db, email: str, password: str):
     user = get_user_by_email(db, email)
@@ -70,7 +66,6 @@ def authenticate_user(db, email: str, password: str):
     if not security.verify_password(password, user.hashed_password):
         return False
     return user
-
 
 def sign_up_new_user(db, email: str, password: str):
     user = get_user_by_email(db, email)
@@ -82,7 +77,7 @@ def sign_up_new_user(db, email: str, password: str):
             email=email,
             password=password,
             is_active=True,
-            is_superuser=False,
+            is_superuser=False
         ),
     )
     return new_user
