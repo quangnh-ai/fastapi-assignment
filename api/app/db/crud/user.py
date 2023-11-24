@@ -32,8 +32,8 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 def create_user(db: Session, user: UserCreate):
-    user = db.query(models.User).filter(models.User.email == user.email).first()
-    if user:
+    user_in_db = db.query(models.User).filter(models.User.email == user.email).first()
+    if user_in_db:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User is existed"

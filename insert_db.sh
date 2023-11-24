@@ -1,0 +1,1 @@
+psql -U admin -d api -a -f /mnt/init_sql/init.sql

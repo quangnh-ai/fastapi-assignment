@@ -2,6 +2,7 @@ import typing
 
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import extract
 
 from db import models, schemas
 
@@ -23,11 +24,22 @@ def get_book_by_title(db: Session, title: str):
         )
     return book
 
-def get_books_by_publish_date(db: Session, publish_date: str):
+def get_books_by_publish_date(db: Session, year: int, month: int, date: int):
+    publish_date = str(year) + '-' + str(month) + '-' + str(date)
     return db.query(models.Book).filter(models.Book.publish_date == publish_date).all()
 
 def get_books_by_author(db: Session, author: str):
     return db.query(models.Book).filter(models.Book.author == author).all()
+
+def get_books_by_publish_month(db: Session, year: int, month: int):
+    return db.query(models.Book).filter(
+        extract('month', models.Book.publish_date)==month, 
+        extract('year', models.Book.publish_date)==year).all()
+
+def get_books_by_publish_year(db: Session, year: int):
+    return db.query(models.Book).filter(
+        extract("year", models.Book.publish_date)==year
+    ).all()
 
 def get_book_by_isbn(db: Session, isbn: str):
     book = db.query(models.Book).filter(models.Book.isbn == isbn).first()
@@ -41,7 +53,7 @@ def get_book_by_isbn(db: Session, isbn: str):
 def get_all_books(db: Session):
     return db.query(models.Book).all()
 
-def create_book(db: Session, book: schemas.BookCreate):
+def create_book(db: Session, book: schemas.BookCreate, image_link: str):
     if db.query(models.Book).filter(models.Book.title == book.title).first():
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -57,6 +69,7 @@ def create_book(db: Session, book: schemas.BookCreate):
         author=book.author,
         publish_date=book.publish_date,
         isbn=book.isbn,
+        image_link=image_link,
         price=book.price
     )
     db.add(db_book)
@@ -73,11 +86,13 @@ def update_book(db: Session, book_id: int, book: schemas.BookUpdate):
         )
     update_data = book.dict(exclude_unset=True)
     for key, value in update_data.items():
-        setattr(db_book, key, value)
+        if value is not None:
+            setattr(db_book, key, value)
     db.add(db_book)
     db.commit()
     db.refresh(db_book)
     return db_book
+
 
 def delete_book(db: Session, book_id: int):
     book = get_book_by_id(db, book_id)

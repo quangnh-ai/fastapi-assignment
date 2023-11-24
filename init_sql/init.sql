@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS user_table (
+CREATE TABLE IF NOT EXISTS users (
     id serial NOT NULL,
     email TEXT,
     first_name TEXT,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS user_table (
     PRIMARY KEY (id)
 );
 
-INSERT INTO user_table (
+INSERT INTO users (
     email, 
     first_name, 
     last_name, 
@@ -26,21 +26,23 @@ VALUES(
     '1'
 );
 
-CREATE TABLE IF NOT EXISTS book (
+CREATE TABLE IF NOT EXISTS books (
     id serial NOT NULL,
     title TEXT,
     author TEXT,
     publish_date DATE,
     isbn TEXT NOT NULL,
+    image_link TEXT,
     price FLOAT,
     PRIMARY KEY (id)
 );
 
-INSERT INTO book (
+INSERT INTO books (
     title, 
     author, 
     publish_date, 
-    isbn, 
+    isbn,
+    image_link,
     price
 )
 VALUES(
@@ -48,6 +50,7 @@ VALUES(
     'IT Man',
     '2023-01-01',
     '111111111',
+    'http://localhost:8081/api/v1/books/show_image/?path=/images/111111111.jpg',
     9.99
 ),
 (
@@ -55,12 +58,14 @@ VALUES(
     'Chef',
     '2023-02-01',
     '222222222',
+    'http://localhost:8081/api/v1/books/show_image/?path=/images/222222222.jpg',
     10.99
 ),
 (
-    'Electronic Book',
+    'Electricity Book',
     'Engineer',
     '2023-03-01',
     '333333333',
+    'http://localhost:8081/api/v1/books/show_image/?path=/images/333333333.jpg',
     4.99
 );

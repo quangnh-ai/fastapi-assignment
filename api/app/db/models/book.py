@@ -16,3 +16,4 @@ class Book(Base):
     publish_date = Column(Date)
     isbn = Column(String, unique=True, nullable=False)
     price = Column(Float)
+    image_link = Column(String)

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import date
+from fastapi import UploadFile, File
 
 class BookBase(BaseModel):
     title: str = None
@@ -9,6 +10,7 @@ class BookBase(BaseModel):
     price: float = None
 
 class Book(BookBase):
+    image_link: str
     id: int
     
     class Config:
