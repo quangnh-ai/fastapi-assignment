@@ -21,11 +21,6 @@ def get_user_by_id(db: Session, user_id: int):
 
 def get_user_by_email(db: Session, email: str):
     user = db.query(models.User).filter(models.User.email == email).first()
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail="User not found"
-        )
     return user
 
 def get_users(db: Session, skip: int = 0, limit: int = 100):

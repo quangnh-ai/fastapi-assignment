@@ -53,7 +53,7 @@ async def signup(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(
-        minutes=config.AUTHENTICATE_ACCESS_TOKEN_EXPIRE_MINUTES
+        minutes=int(config.AUTHENTICATE_ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     if user.is_superuser:
         permissions = "admin"

@@ -14,7 +14,7 @@ services:
       - ./api/app:/app/
       - ./images:/images/
       - ./logs/:/logs/
-    
+  
   postgres:
     image: postgres:13.1
     container_name: postgres
