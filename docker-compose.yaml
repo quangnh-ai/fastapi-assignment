@@ -13,8 +13,25 @@ services:
     volumes:
       - ./api/app:/app/
       - ./images:/images/
-      - ./logs/:/logs/
-  
+      - ./logs/api:/logs/
+
+  redis:
+    image: redis:alpine3.18
+    container_name: redis
+    ports:
+      - 6379:6379
+    command:
+      redis-server --requirepass 123456
+
+  rabbitmq:
+    image: rabbitmq:3.9.29-management-alpine
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+       - rabbitmq.env
+
   postgres:
     image: postgres:13.1
     container_name: postgres
@@ -26,4 +43,12 @@ services:
       - ./init_sql:/mnt/init_sql
     ports:
       - 5432:5432
-  
+
+  worker:
+    build: ./worker/
+    container_name: worker
+    env_file: 
+      - worker.env
+    volumes:
+      - ./worker/app:/app/
+      - ./logs/celery:/logs/

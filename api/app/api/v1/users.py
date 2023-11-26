@@ -129,6 +129,5 @@ async def get_current_user(
     *,
     current_user=Depends(get_current_active_user)
 ):
-    
     return current_user
     

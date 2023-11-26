@@ -210,6 +210,11 @@ async def update(
     current_user=Depends(get_current_active_superuser)
 ):
     if file is not None:
+        if file.content_type not in ["image/jpeg", "image/png"]:
+            raise HTTPException(
+                status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                detail="This file type is not supported"
+            )
         db_book = get_book_by_id(db, book_id)
         isbn = db_book.isbn
         os.remove(os.path.join(config.STORAGE_PATH, isbn + '.jpg'))
@@ -219,6 +224,21 @@ async def update(
             os.path.join(config.STORAGE_PATH, isbn + '.jpg')
         )
     return update_book(db, book_id, book)
+
+@book_router.delete(
+    "/delete/{book_id}",
+    response_model=Book,
+    name="Delete book",
+    status_code=status.HTTP_200_OK,
+    response_model_exclude_none=True
+)
+async def delete(
+    *,
+    book_id: int,
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_superuser)
+):
+    return delete_book(db, book_id)
 
 # test upload file
 @book_router.post(

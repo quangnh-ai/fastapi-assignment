@@ -5,7 +5,12 @@ from logging.handlers import TimedRotatingFileHandler
 
 from core import config
 from core.authentication import get_current_active_user
-from api.v1 import user_router, authentication_router, book_router
+from api.v1 import (
+    user_router, 
+    authentication_router, 
+    book_router,
+    celery_router
+)
 from db.session import session_local
 
 app = FastAPI(
@@ -42,6 +47,12 @@ app.include_router(
     book_router,
     prefix="/api/v1/books",
     tags=["V1 Books"]
+)
+
+app.include_router(
+    celery_router,
+    prefix="/api/v1/celery",
+    tags=["V1 Celery"]
 )
 
 app.include_router(
