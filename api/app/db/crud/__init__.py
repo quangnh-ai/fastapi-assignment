@@ -17,6 +17,7 @@ from db.crud.book import (
     get_books_by_publish_date,
     get_books_by_publish_month,
     get_books_by_publish_year,
+    get_book_by_filter,
     get_all_books
 )
 
@@ -38,5 +39,6 @@ __all__ = [
     get_books_by_publish_date,
     get_books_by_publish_month,
     get_books_by_publish_year,
+    get_book_by_filter,
     get_all_books
 ]

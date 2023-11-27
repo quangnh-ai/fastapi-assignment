@@ -16,5 +16,6 @@ __all__ = [
     BookBase,
     BookCreate,
     BookUpdate,
-    BookOut
+    BookOut,
+    BookFilter
 ]

@@ -21,13 +21,15 @@ from db.crud import (
     get_books_by_publish_date,
     get_books_by_publish_month,
     get_books_by_publish_year,
+    get_book_by_filter,
     update_book,
     delete_book
 )
 from db.schemas import (
     Book,
     BookCreate,
-    BookUpdate
+    BookUpdate,
+    BookFilter
 )
 from core.authentication import (
     get_current_active_superuser,
@@ -193,6 +195,19 @@ def get_books_info_by_public_year(
     db=Depends(get_db)
 ):
     return get_books_by_publish_year(db, year)
+
+@book_router.get(
+    "/get/filter/",
+    response_model=typing.List[Book],
+    name="Get books by filter",
+    status_code=status.HTTP_200_OK
+)
+def get_books_info_by_filter(
+    *,
+    filter: BookFilter = Depends(),
+    db=Depends(get_db)
+):
+    return get_book_by_filter(db, filter)
 
 @book_router.put(
     "/update/{book_id}",

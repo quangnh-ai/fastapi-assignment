@@ -50,6 +50,14 @@ def get_book_by_isbn(db: Session, isbn: str):
         )
     return book
 
+def get_book_by_filter(db: Session, filter: schemas.BookFilter):
+    query = db.query(models.Book)
+    if filter.author is not None:
+        query = query.filter(models.Book.author == filter.author)
+    if filter.publish_date is not None:
+        query = query.filter(models.Book.publish_date == filter.publish_date)
+    return query.all()
+
 def get_all_books(db: Session):
     return db.query(models.Book).all()
 
@@ -104,7 +112,4 @@ def delete_book(db: Session, book_id: int):
     db.delete(book)
     db.commit()
     return book
-
-
-
 

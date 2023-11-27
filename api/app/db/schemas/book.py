@@ -26,5 +26,12 @@ class BookUpdate(BookBase):
     class Config:
         orm_mode = True
 
+class BookFilter(BaseModel):
+    author: str = None
+    publish_date: date = None
+
+    class Config:
+        orm_mode = True
+
 class BookOut(BookBase):
     pass
