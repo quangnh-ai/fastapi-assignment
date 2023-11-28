@@ -2,7 +2,8 @@ import typing
 from fastapi import (
     APIRouter,
     Depends,
-    status
+    status,
+    HTTPException
 )
 
 from db.session import get_db
@@ -39,6 +40,11 @@ async def create(
     db=Depends(get_db),
     current_user=Depends(get_current_active_superuser)
 ):
+    if current_user.is_authenticated == False:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not authenticated"
+        )
     return create_user(db, user)
 
 @user_router.put(
@@ -55,6 +61,11 @@ async def update(
     db=Depends(get_db),
     current_user=Depends(get_current_active_superuser)
 ):
+    if current_user.is_authenticated == False:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not authenticated"
+        )
     return update_user(db, user_id, user)
 
 @user_router.delete(
@@ -70,6 +81,11 @@ async def delete(
     db=Depends(get_db),
     current_user=Depends(get_current_active_superuser)
 ):
+    if current_user.is_authenticated == False:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not authenticated"
+        )
     return delete_user(db, user_id)
 
 @user_router.get(

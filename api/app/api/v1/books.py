@@ -54,6 +54,11 @@ async def create(
     db=Depends(get_db),
     current_user=Depends(get_current_active_superuser)
 ):
+    if current_user.is_authenticated == False:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not authenticated"
+        )
     if file.content_type not in ["image/jpeg", "image/png"]:
         raise HTTPException(
             status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
@@ -80,7 +85,8 @@ async def create(
 async def get_book_info_by_id(
     *,
     book_id: int,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_book_by_id(db, book_id)
 
@@ -92,7 +98,9 @@ async def get_book_info_by_id(
     response_model_exclude_none=True
 )
 async def get_books(
-    db=Depends(get_db)
+    *,
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_all_books(db)
 
@@ -106,7 +114,8 @@ async def get_books(
 async def get_book_info_by_id(
     *,
     book_id: int,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_book_by_id(db, book_id)
 
@@ -120,7 +129,8 @@ async def get_book_info_by_id(
 async def get_book_info_by_title(
     *,
     book_title: str,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_book_by_title(db, book_title)
 
@@ -134,7 +144,8 @@ async def get_book_info_by_title(
 async def get_book_info_by_isbn(
     *,
     book_isbn: str,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_book_by_isbn(db, book_isbn)
 
@@ -148,7 +159,8 @@ async def get_book_info_by_isbn(
 async def get_book_info_by_author(
     *,
     author: str,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_books_by_author(db, author)
 
@@ -164,7 +176,8 @@ def get_books_info_by_publish_date(
     year: int,
     month: int,
     date: int,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_books_by_publish_date(db, year, month, date)
 
@@ -179,7 +192,8 @@ def get_books_info_by_publish_month(
     *,
     year: int,
     month: int,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_books_by_publish_month(db, year, month)
 
@@ -192,7 +206,8 @@ def get_books_info_by_publish_month(
 def get_books_info_by_public_year(
     *,
     year: int,
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_books_by_publish_year(db, year)
 
@@ -205,7 +220,8 @@ def get_books_info_by_public_year(
 def get_books_info_by_filter(
     *,
     filter: BookFilter = Depends(),
-    db=Depends(get_db)
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user)
 ):
     return get_book_by_filter(db, filter)
 
@@ -224,6 +240,13 @@ async def update(
     db=Depends(get_db),
     current_user=Depends(get_current_active_superuser)
 ):
+    
+    if current_user.is_authenticated == False:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not authenticated"
+        )
+    
     if file is not None:
         if file.content_type not in ["image/jpeg", "image/png"]:
             raise HTTPException(
@@ -253,6 +276,11 @@ async def delete(
     db=Depends(get_db),
     current_user=Depends(get_current_active_superuser)
 ):
+    if current_user.is_authenticated == False:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not authenticated"
+        )
     return delete_book(db, book_id)
 
 # test upload file
@@ -271,7 +299,6 @@ async def test_upload_file(
             detail="This file type is not supported"
         )
     
-
     time_now_utc = time.now_utc()
     file_name = image.filename
     dir_path = config.STORAGE_PATH + time.str_yyyy_mm_dd(time_now_utc)

@@ -96,6 +96,12 @@ api
 ![V1 Books](image_readme/books.png "V1 Books")
 ![V1 Celery and Auth](image_readme/celery-auth.png "V1 Celery and Auth")
 
+## List of user
+- Admin(Superuser, authenticated): admin@admin.com/admin
+- Test(Superuser, not-authenticated): test@test.com/test
+- Quang(user, authenticated): quang@quang.com/quang
+- Another(user, not-authenticated): another@another.com/another
+
 ### Optional tasks:
 - Upload image: Already implemented but this method is saving image into the local storage. Future work: save image into s3 object storage (Ceph, Minio)
 - Rate limiting: Use Redis and window functions (Not implemented yet, base on the idea from this URL https://dev.to/dpills/how-to-rate-limit-fastapi-with-redis-1dhf)
