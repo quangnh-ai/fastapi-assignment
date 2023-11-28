@@ -54,7 +54,7 @@ api
 │    │   └── security.py 
 │    │   
 │    ├── db 
-│    │   ├── curd 
+│    │   ├── crud 
 │    │   │   ├── book.py
 │    │   │   └── user.py
 │    │   ├── models
@@ -97,8 +97,13 @@ api
 ![V1 Celery and Auth](image_readme/celery-auth.png "V1 Celery and Auth")
 
 ### Optional tasks:
+- Upload image: Already implemented but this method is saving image into the local storage. Future work: save image into s3 object storage (Ceph, Minio)
 - Rate limiting: Use Redis and window functions (Not implemented yet, base on the idea from this URL https://dev.to/dpills/how-to-rate-limit-fastapi-with-redis-1dhf)
-- 1000 requests per second: Use celery, rabbitmq, Redis and Replica-database (Note implemented yet, presented in diagram)
+- 1000 requests per second: Use celery, rabbitmq, Redis and Replica-database (Not implemented yet, presented in diagram)
 
 ### System Diagram:
-![V1 Users](image_readme/diagram.jpg "System Diagram")
+![System Diagram](image_readme/diagram.jpg "System Diagram")
+
+
+### Repo Status
+Still Update until I feel it's perfect
